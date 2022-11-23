@@ -18,7 +18,7 @@ title=[]
 
 # request = youtube.search().list(part='snippet', channelId='채널ID')
 # request = youtube.videos().list(part='snippet', channelId='채널ID')
-request = youtube.playlistItems().list(part="snippet", playlistId='플레이리스트ID')
+request = youtube.playlistItems().list(part="snippet", playlistId='플레이리스트ID', maxResults = 150)
 
 # https://stackoverflow.com/questions/18953499/youtube-api-to-fetch-all-videos-on-a-channel
 
@@ -71,7 +71,12 @@ for u in range(len(vdf)):
         title.append(response['items'][0]['snippet']['title'])
         category_id.append(response['items'][0]['snippet']['categoryId'])
         views.append(response['items'][0]['statistics']['viewCount'])
-        likes.append(response['items'][0]['statistics']['likeCount'])
+        try:
+          likes.append(response['items'][0]['statistics']['likeCount'])
+        except KeyError:
+          # Key is not present
+          likes.append(0);
+          pass
         comments.append(response['items'][0]['statistics']['commentCount'])
         date.append(response['items'][0]['snippet']['publishedAt'])
 
